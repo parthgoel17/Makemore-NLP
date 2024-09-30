@@ -78,11 +78,11 @@ class BigramLanguageModel(nn.Module):
     def generate(self, idx, max_new_tokens):
 
         for _ in range(max_new_tokens):
-            logits, _ = self(idx)     # get predictions
-            logits = logits[:, -1, :] # take last token of size (B, C)
+            logits, _ = self(idx)     
+            logits = logits[:, -1, :] #(B, C)
             probs = F.softmax(logits, dim=-1) # create probability of size (B, C)
-            idx_next = torch.multinomial(probs, num_samples=1) # sample from distribution of size (B, 1)
-            idx = torch.cat((idx, idx_next), dim=1) # append sampled index to the running sequence (B, T+1)
+            idx_next = torch.multinomial(probs, num_samples=1) # sample from (B, 1)
+            idx = torch.cat((idx, idx_next), dim=1) # (B, T+1)
         return idx
 
 
